@@ -1,0 +1,79 @@
+﻿@page "/upcoming"
+@using HoloDex_UI.Data
+@using Newtonsoft.Json
+@inject HoloClient client
+
+<PageTitle>Live and Upcoming</PageTitle>
+
+<h1>Live & Upcoming by Organization</h1>
+<div class="searchDropdwn">
+    <select @onchange="OnDropdownChange">
+        <option value="">Selection</option>
+        @foreach (var item in orgs)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+</div>
+<button class="btn-search" @onclick="GetStreamsAsync">Search</button>
+<br />
+@if (videos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EmbedVideo @ref="embedVideo" />
+    <h3>Results</h3>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Channel</th>
+                    <th>Title</th>
+                    <th>Topic</th>
+                    <th>Start Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vid in videos)
+                {
+                    @if (vid.ActualEnd == null)
+                    {
+                        <tr class="@vid.Status" @key="vid">
+                            <td><img class="channel-img" src=@vid.Channel.PhotoUrl/>@vid.Channel.EngName</td>
+                            @*<td><a href="https://www.youtube.com/watch?v=@vid.VideoId">@vid.Title</a></td>*@
+                            <td><button class="" @onclick="@(() => embedVideo?.populateComponent(vid))">@vid.Title</button></td>
+                            <td>@vid.Topic</td>
+                            <td>@vid.AvailableAt.ToLocalTime().ToShortDateString() @vid.AvailableAt.ToLocalTime().ToShortTimeString()</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<Video>? videos;
+    private List<string> orgs = new List<string>(Organization.GetOrganizations);
+
+    private EmbedVideo? embedVideo;
+
+    private string? selection;
+    private bool embedView = false;
+
+    protected async Task GetStreamsAsync()
+    {
+        embedVideo?.populateComponent();
+        if (selection != null)
+        {
+            videos = (List<Video>)await client.GetStreams(selection);
+        }
+    }
+
+    protected void OnDropdownChange(ChangeEventArgs e)
+    {
+        selection = e.Value?.ToString();
+    }
+}

@@ -1,0 +1,103 @@
+﻿@page "/channels"
+@using HoloDex_UI.Data
+@using Newtonsoft.Json
+@inject HoloClient client
+
+<PageTitle>Find Channels</PageTitle>
+
+<h1>Search Channels by Organization</h1>
+<br />
+<select @onchange="OnDropdownChange">
+    <option value="">Selection</option>
+    @foreach (var item in orgs)
+    {
+        <option value="@item">@item</option>
+    }
+</select>
+<button class="btn-search" @onclick="GetChannelsAsync">Search</button>
+<br />
+@if (channels == null)
+{
+    <p><em>Loading...</em></p>
+}
+@*
+else
+{
+        <Results Data=@channels>
+        @if ((context.Group != "Official" && context.Group != "Misc") && context.IsInactive != true)
+        {
+           <img class="channel-img" src=@context.PhotoUrl alt="" /> @context.EngName 
+        }
+        </Results>
+}
+*@
+else
+{
+    <h3>Results</h3>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Avatar</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ch in channels)
+                {       
+                    @if ((ch.Group != "Official" && ch.Group != "Misc") && ch.IsInactive != true)
+                    {
+                        <tr>
+                            <td><img class="channel-img" src=@ch.PhotoUrl alt=""/></td>
+                            @if (ch.EngName == null)
+                            {
+                                <td><a href="https://www.youtube.com/channel/@ch.Id">@ch.Name</a></td>
+                            }
+                            else
+                            {
+                                <td><a href="https://www.youtube.com/channel/@ch.Id">@ch.EngName</a></td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <button class="btn-search" @onclick="AppendChannelsAsync">Load More</button>
+    </div>
+}
+
+@code {
+    private IEnumerable<Channel>? channels;
+    private List<string> orgs = new List<string>(Organization.GetOrganizations);
+    private string? selection;
+
+    private int resultOffset = 0;
+    private int maxResults = 50;
+
+    protected async Task GetChannelsAsync()
+    {
+        channels = null;
+        resultOffset = 0;
+        if (selection != null)
+        {
+            channels = (List<Channel>)await client.GetChannels(selection, 0, maxResults);
+        }
+    }
+
+    protected async Task AppendChannelsAsync()
+    {
+        resultOffset++;
+        int offset = resultOffset * maxResults;
+
+        var items = (List<Channel>)await client.GetChannels(selection, offset, maxResults);
+
+        foreach (Channel ch in items)
+        {
+            channels.Append(ch);
+        }        
+    }
+    protected void OnDropdownChange(ChangeEventArgs e)
+    {
+        selection = e.Value?.ToString();
+    }
+}
