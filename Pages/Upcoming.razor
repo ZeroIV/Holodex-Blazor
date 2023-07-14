@@ -2,13 +2,15 @@
 @using HoloDex_UI.Data
 @using Newtonsoft.Json
 @inject HoloClient client
+@inject NavigationManager NavigationManager
 
 <PageTitle>Live and Upcoming</PageTitle>
 
 <h1>Live & Upcoming by Organization</h1>
 <div class="searchDropdwn">
     <select @onchange="OnDropdownChange">
-        <option value="">Selection</option>
+        <option value=null>Selection</option>
+        <option value="">All Upcoming</option>
         @foreach (var item in orgs)
         {
             <option value="@item">@item</option>
@@ -19,13 +21,14 @@
 <br />
 @if (videos == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Please Make a Selection</em></p>
 }
 else
 {
-    <EmbedVideo @ref="embedVideo" />
-    <h3>Results</h3>
     <div>
+    @if (videos.FirstOrDefault() != null)
+    {                       
+        <h3>Results</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -35,41 +38,59 @@ else
                     <th>Start Time</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach (var vid in videos)
-                {
+            @foreach (var vid in videos)
+            {
+                <tbody>
                     @if (vid.ActualEnd == null)
                     {
+                        string url = "https://www.youtube.com/watch?v=" + @vid.VideoId;
                         <tr class="@vid.Status" @key="vid">
                             <td><img class="channel-img" src=@vid.Channel.PhotoUrl/>@vid.Channel.EngName</td>
-                            @*<td><a href="https://www.youtube.com/watch?v=@vid.VideoId">@vid.Title</a></td>*@
-                            <td><button class="" @onclick="@(() => embedVideo?.populateComponent(vid))">@vid.Title</button></td>
+                            @*<td><a href=url>@vid.Title</a></td>*@
+                            <td><button class="" @onclick=@(() => GetStream(vid.VideoId))>@vid.Title</button></td>
                             <td>@vid.Topic</td>
                             <td>@vid.AvailableAt.ToLocalTime().ToShortDateString() @vid.AvailableAt.ToLocalTime().ToShortTimeString()</td>
                         </tr>
-                    }
-                }
-            </tbody>
+                    }                    
+                </tbody>
+            }
         </table>
+    }
+    else
+    {
+        setContentMessage("No results found");
+        <p><em>@contentMessage</em></p>
+    }
     </div>
 }
 
-@code {
+    @code {
     private List<Video>? videos;
     private List<string> orgs = new List<string>(Organization.GetOrganizations);
 
-    private EmbedVideo? embedVideo;
-
+    private string contentMessage = ""; 
     private string? selection;
-    private bool embedView = false;
 
     protected async Task GetStreamsAsync()
     {
-        embedVideo?.populateComponent();
         if (selection != null)
         {
             videos = (List<Video>)await client.GetStreams(selection);
         }
+        else
+        {
+            //error message should displays
+        }
+    }
+
+    void setContentMessage(string str)
+    {
+        contentMessage = str;
+    }
+
+    void GetStream (string videoId)
+    {
+        NavigationManager.NavigateTo($"/EmbedVideo/{videoId}", true);
     }
 
     protected void OnDropdownChange(ChangeEventArgs e)
