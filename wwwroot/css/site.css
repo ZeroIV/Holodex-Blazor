@@ -69,7 +69,6 @@ a, .btn-link {
 
 .channel-img {
     border-radius: 40%;
-    margin-right: 1em;
     max-height: 3em;
 }
 
@@ -91,6 +90,32 @@ div.searchDropdwn {
 table {
 /*    margin-bottom: 2em;*/
     border-style: solid;
+}
+
+.vid-cards-list{
+    display: flex;
+    flex-wrap:wrap;
+}
+
+.vid-card{
+    display:flex;
+    float:left;
+    border:5px double black;
+    margin: 1.5%;
+    padding: 1%;
+    width: 30%;
+    height:15rem;
+}
+
+.card-contents {
+    font-size: .75rem;
+}
+
+.card-contents> * {
+}
+
+.vid-card>img{
+    
 }
 
 thead>tr {

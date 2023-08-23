@@ -28,33 +28,23 @@ else
     <div>
     @if (videos.FirstOrDefault() != null)
     {                       
-        <h3>Results</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Channel</th>
-                    <th>Title</th>
-                    <th>Topic</th>
-                    <th>Start Time</th>
-                </tr>
-            </thead>
-            @foreach (var vid in videos)
+        <div class="vid-cards-list">
+        @foreach (var vid in videos)
+        {
+            @if (vid.ActualEnd == null)
             {
-                <tbody>
-                    @if (vid.ActualEnd == null)
-                    {
-                        string url = "https://www.youtube.com/watch?v=" + @vid.VideoId;
-                        <tr class="@vid.Status" @key="vid">
-                            <td><img class="channel-img" src=@vid.Channel.PhotoUrl/>@vid.Channel.EngName</td>
-                            @*<td><a href=url>@vid.Title</a></td>*@
-                            <td><button class="" @onclick=@(() => GetStream(vid.VideoId))>@vid.Title</button></td>
-                            <td>@vid.Topic</td>
-                            <td>@vid.AvailableAt.ToLocalTime().ToShortDateString() @vid.AvailableAt.ToLocalTime().ToShortTimeString()</td>
-                        </tr>
-                    }                    
-                </tbody>
-            }
-        </table>
+            /* @if (vid.Status == "live"){ */
+                <div class="vid-card" id=@vid.Status >
+                    <div class="card-contents" @onclick=@(() => GetStream(vid.VideoId))>
+                        <em>@vid.Topic</em><br />
+                        <img class="channel-img" src="@vid.Channel.PhotoUrl"/>
+                        <h8>@vid.Title</h8>
+                        <time>@vid.AvailableAt.ToLocalTime().ToShortDateString() @vid.AvailableAt.ToLocalTime().ToShortTimeString()</time>
+                    </div>
+                </div>
+            }                    
+        }
+        </div>
     }
     else
     {

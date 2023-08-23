@@ -204,10 +204,8 @@ namespace HoloDex_UI.Data
             sb.Append(type);
 
             JArray result = await RequestArray(sb.ToString());
-            //var result = await httpClient.GetFromJsonAsync<List<Video>>(sb.ToString());
 
             return result.ToObject<List<Video>>();
-            //return result;
         }
 
         public async Task<IReadOnlyCollection<Video>> GetUpcoming(string[] channels)
