@@ -7,7 +7,8 @@
 <PageTitle>Live and Upcoming</PageTitle>
 
 <h1>Live & Upcoming by Organization</h1>
-<div class="searchDropdwn">
+<div class="searchDropdown">
+    <br/>
     <select @onchange="OnDropdownChange">
         <option value=null>Selection</option>
         <option value="">All Upcoming</option>
@@ -21,7 +22,7 @@
 <br />
 @if (videos == null)
 {
-    <p><em>Please Make a Selection</em></p>
+    <p><em>Please make a selection</em></p>
 }
 else
 {
@@ -54,7 +55,7 @@ else
     </div>
 }
 
-    @code {
+@code {
     private List<Video>? videos;
     private List<string> orgs = new List<string>(Organization.GetOrganizations);
 
@@ -65,11 +66,13 @@ else
     {
         if (selection != null)
         {
+            if (selection.Contains("&"))
+                selection = selection.Replace("&","%26");
             videos = (List<Video>)await client.GetStreams(selection);
         }
         else
         {
-            //error message should displays
+            //error message should display
         }
     }
 

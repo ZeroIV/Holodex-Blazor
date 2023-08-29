@@ -23,7 +23,7 @@ namespace HoloDex_UI.Data
         public const string Tsunderia = "Tsunderia";
         public const string TwitchIndie = "Twitch Independents";
         public const string Independent = "Independents";
-        public const string VU = "V%26U";
+        public const string VU = "V&U";
         public const string Vshojo = "VShojo";
         public const string VReverie = "VReverie";
 

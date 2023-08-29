@@ -7,28 +7,30 @@
 
 <h1>Search Channels by Organization</h1>
 <br />
-<select @onchange="OnDropdownChange">
-    <option value="">Selection</option>
-    @foreach (var item in orgs)
-    {
-        <option value="@item">@item</option>
-    }
-</select>
+<div class="searchDropdown">
+    <select @onchange="OnDropdownChange">
+        <option value="">Selection</option>
+        @foreach (var item in orgs)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+</div>
 <button class="btn-search" @onclick="GetChannelsAsync">Search</button>
 <br />
 @if (channels == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Please make a selection</em></p>
 }
 @*
 else
 {
-        <Results Data=@channels>
-        @if ((context.Group != "Official" && context.Group != "Misc") && context.IsInactive != true)
-        {
-           <img class="channel-img" src=@context.PhotoUrl alt="" /> @context.EngName 
-        }
-        </Results>
+    <Results Data=@channels>
+    @if ((context.Group != "Official" && context.Group != "Misc") && context.IsInactive != true)
+    {
+        <img class="channel-img" src=@context.PhotoUrl alt="" /> @context.EngName 
+    }
+    </Results>
 }
 *@
 else
@@ -38,7 +40,7 @@ else
         <table class="table">
             <thead>
                 <tr>
-                    <th>Avatar</th>
+                    <th>Channel</th>
                     <th>Name</th>
                 </tr>
             </thead>
@@ -62,7 +64,10 @@ else
                 }
             </tbody>
         </table>
-        <button class="btn-search" @onclick="AppendChannelsAsync">Load More</button>
+        @if (channels.Count() >= 50)
+        {
+            <button class="btn-search" @onclick="AppendChannelsAsync">Load More</button>
+        }
     </div>
 }
 
