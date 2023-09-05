@@ -1,6 +1,7 @@
 ﻿using System.Text;
+using System.Net;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -164,12 +165,14 @@ namespace HoloDex_UI.Data
         public async Task<IReadOnlyCollection<Video>> GetStreams(string org)
         {
             string include = "live_info";
-            int limit = 25;
+            int limit = 50;
             int maxHours = 24;
             int offset = 0;
             string sort = "start_scheduled";
             string order = "asc";
             string type = "stream";
+
+            org = Uri.EscapeDataString(org);
 
             StringBuilder sb = new StringBuilder("live?");
 
