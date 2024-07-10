@@ -14,7 +14,7 @@ namespace HoloDex_UI.Data
         private static string key;
         private static HttpClient httpClient;
 
-        public HoloClient(string str = APIKEY, HttpClient client = null)
+        public HoloClient(string str = "APIKEY", HttpClient client = null)
         {
             key = str;
             httpClient = client ?? new HttpClient();

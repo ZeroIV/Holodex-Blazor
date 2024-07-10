@@ -8,8 +8,8 @@
 <h1>Search Channels by Organization</h1>
 <br />
 <div class="searchDropdown">
-    <select @onchange="OnDropdownChange">
-        <option value="">Selection</option>
+    <select autofocus @onchange="OnDropdownChange">
+        <option hidden selected>Selection</option>
         @foreach (var item in orgs)
         {
             <option value="@item">@item</option>

@@ -10,7 +10,7 @@
 <div class="searchDropdown">
     <br/>
     <select @onchange="OnDropdownChange">
-        <option value=null>Selection</option>
+        <option value=null hidden selected>Selection</option>
         <option value="">All Upcoming</option>
         @foreach (var item in orgs)
         {
@@ -36,8 +36,9 @@ else
             @if (vid.ActualEnd == null)
             {
             /* @if (vid.Status == "live"){ */
-                <div class="vid-card" id=@vid.Status >
-                    <div class="card-contents" @onclick=@(() => GetStream(vid.VideoId))>
+                <div class="vid-card" id=@vid.Status>
+                    <div class="card-contents" style="background: url('https://i.ytimg.com/vi/@vid.VideoId/maxresdefault_live.jpg');
+                                                    background-size:100%;" @onclick=@(() => GetStream(vid.VideoId))>
                         <em>@vid.Topic</em><br />
                         <img class="channel-img" src="@vid.Channel.PhotoUrl"/>
                         <h8>@vid.Title</h8>
