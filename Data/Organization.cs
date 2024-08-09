@@ -26,6 +26,13 @@ namespace HoloDex_UI.Data
         public const string VU = "V&U";
         public const string Vshojo = "VShojo";
         public const string VReverie = "VReverie";
+        public const string Globie = "globie";
+        public const string V4Mirai = "V4Mirai";
+        public const string MilPro = "MillionProduction";
+        public const string PixelLink = "PixelLink";
+        public const string Specialite = "Specialite";
+        public const string Mixst = "Mixstgirls";
+
 
 
         public static string[] GetOrganizations
@@ -38,7 +45,8 @@ namespace HoloDex_UI.Data
                     MyHoloTV, Nijisanji, PhaseConnect,
                     Prism, Kawaii, SevenSeventyFour,
                     Tsunderia, TwitchIndie, Independent,
-                    VU, Vshojo, VReverie};
+                    VU, Vshojo, VReverie, Globie, V4Mirai,
+                    MilPro, PixelLink, Specialite, Mixst};
             }
         }
     }
